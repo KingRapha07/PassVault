@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}— Tableau de bord{% endblock %}
+{% block content %}
+
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-number">{{ total }}</div>
+    <div class="stat-label">Mots de passe</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ cats|length }}</div>
+    <div class="stat-label">Catégories</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number" style="color:var(--accent2)">🔒</div>
+    <div class="stat-label">Chiffré AES-256</div>
+  </div>
+</div>
+
+<!-- Barre de recherche -->
+<form method="GET" class="search-bar">
+  <input type="text" name="q" placeholder="🔍 Rechercher un site ou identifiant..." value="{{ search }}">
+  <select name="cat" style="width:auto;min-width:140px;">
+    <option value="">Toutes les catégories</option>
+    {% for c in cats %}
+      <option value="{{ c.categorie }}" {% if cat == c.categorie %}selected{% endif %}>{{ c.categorie }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn btn-ghost" style="white-space:nowrap">Filtrer</button>
+  {% if search or cat %}
+    <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">✕ Réinitialiser</a>
+  {% endif %}
+</form>
+
+<!-- Tableau -->
+<div class="card" style="padding:0;overflow:hidden;">
+  {% if entries %}
+  <table>
+    <thead>
+      <tr>
+        <th>Site</th>
+        <th>Identifiant</th>
+        <th>Mot de passe</th>
+        <th>Catégorie</th>
+        <th>Ajouté le</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in entries %}
+      <tr>
+        <td><strong>{{ e.site }}</strong></td>
+        <td style="color:var(--muted)">{{ e.username }}</td>
+        <td>
+          <span class="pwd-hidden" id="pwd-{{ e.id }}">••••••••</span>
+          <button class="btn btn-ghost btn-sm" onclick="togglePwd({{ e.id }})" id="btn-{{ e.id }}" style="margin-left:8px">👁 Voir</button>
+          <button class="btn btn-ghost btn-sm" onclick="copyPwd({{ e.id }})" style="margin-left:4px">📋</button>
+        </td>
+        <td><span class="badge">{{ e.categorie }}</span></td>
+        <td style="color:var(--muted);font-size:.8rem">{{ e.cree_le[:10] }}</td>
+        <td>
+          <a href="{{ url_for('edit_entry', entry_id=e.id) }}" class="btn btn-ghost btn-sm">✏️</a>
+          <form method="POST" action="{{ url_for('delete_entry', entry_id=e.id) }}" style="display:inline" onsubmit="return confirm('Supprimer cette entrée ?')">
+            <button type="submit" class="btn btn-danger btn-sm">🗑</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div style="text-align:center;padding:3rem;color:var(--muted);">
+    {% if search or cat %}
+      Aucun résultat pour cette recherche.
+    {% else %}
+      Aucun mot de passe enregistré. <a href="{{ url_for('add_entry') }}" style="color:var(--accent)">Ajouter le premier →</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+<script>
+  const cache = {};
+
+  async function togglePwd(id) {
+    const span = document.getElementById('pwd-' + id);
+    const btn  = document.getElementById('btn-' + id);
+    if (span.classList.contains('pwd-reveal')) {
+      span.textContent = '••••••••';
+      span.classList.remove('pwd-reveal');
+      span.classList.add('pwd-hidden');
+      btn.textContent = '👁 Voir';
+      return;
+    }
+    if (!cache[id]) {
+      const res = await fetch('/reveal/' + id);
+      const data = await res.json();
+      cache[id] = data.password;
+    }
+    span.textContent = cache[id];
+    span.classList.remove('pwd-hidden');
+    span.classList.add('pwd-reveal');
+    btn.textContent = '🙈 Cacher';
+  }
+
+  async function copyPwd(id) {
+    if (!cache[id]) {
+      const res = await fetch('/reveal/' + id);
+      const data = await res.json();
+      cache[id] = data.password;
+    }
+    navigator.clipboard.writeText(cache[id]);
+    // Petit feedback visuel
+    const btn = event.target;
+    btn.textContent = '✅';
+    setTimeout(() => btn.textContent = '📋', 1500);
+  }
+</script>
+{% endblock %}

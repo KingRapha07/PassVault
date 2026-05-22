@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PassVault {% block title %}{% endblock %}</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent2: #10b981;
+            --danger: #ef4444;
+            --border: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 2rem 1rem; min-height: 100vh; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        h1 { font-size: 1.8rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem; }
+        a { color: var(--accent); text-decoration: none; }
+        .btn { padding: 0.5rem 1rem; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s; text-decoration: none; font-size: 0.9rem; }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { background: #7dd3fc; }
+        .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+        .btn-ghost:hover { background: var(--border); }
+        .btn-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.4); }
+        .btn-danger:hover { background: var(--danger); color: #fff; }
+        .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.8rem; border-radius: 4px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        
+        /* Formulaires */
+        .form-group { margin-bottom: 1.25rem; }
+        label { display: block; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.9rem; }
+        input[type="text"], input[type="password"], select, textarea { width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 1rem; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); outline: none; }
+        
+        /* Tableaux & Stats (utilisés dans dashboard) */
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border); padding: 1.5rem; border-radius: 12px; text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: var(--accent); margin-bottom: 0.25rem; }
+        .stat-label { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .search-bar { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 1rem; border-bottom: 1px solid var(--border); }
+        th { color: var(--muted); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+        .badge { background: var(--border); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+        .pwd-hidden { font-family: monospace; color: var(--muted); }
+        .pwd-reveal { font-family: monospace; color: var(--accent2); font-weight: bold; }
+        
+        /* Flash messages */
+        .flashes { list-style: none; margin-bottom: 1.5rem; }
+        .flash { padding: 1rem; border-radius: 6px; margin-bottom: 0.5rem; font-weight: 500; }
+        .flash.success { background: rgba(16, 185, 129, 0.15); color: var(--accent2); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .flash.error { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 PassVault</h1>
+            {% if session.get('authenticated') %}
+                <div style="display:flex; gap:1rem; align-items:center;">
+                    <a href="{{ url_for('dashboard') }}">Tableau de bord</a>
+                    <a href="{{ url_for('add_entry') }}" class="btn btn-primary">+ Ajouter</a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm">Déconnexion</a>
+                </div>
+            {% endif %}
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+              <li class="flash {{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}— Connexion{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 400px; margin: 4rem auto; text-align: center;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🔒</div>
+    <h2 style="margin-bottom: 1.5rem;">Coffre-fort Verrouillé</h2>
+    
+    <form method="POST">
+        <div class="form-group" style="text-align: left;">
+            <label for="master_password">Saisis ton mot de passe maître :</label>
+            <input type="password" name="master_password" id="master_password" required autofocus>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Déverrouiller</button>
+    </form>
+</div>
+{% endblock %}

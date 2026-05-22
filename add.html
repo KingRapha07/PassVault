@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}— Ajouter un mot de passe{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 2rem auto;">
+    <h2 style="margin-bottom: 1.5rem;">Ajouter un identifiant</h2>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="site">Nom du site ou service (ex: GitHub, Google...)</label>
+            <input type="text" name="site" id="site" required placeholder="ex: GitHub">
+        </div>
+        <div class="form-group">
+            <label for="username">Identifiant / Email / Nom d'utilisateur</label>
+            <input type="text" name="username" id="username" required placeholder="ex: user@example.com">
+        </div>
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="text" name="password" id="password" required>
+                <button type="button" class="btn btn-ghost" onclick="generatePwd()">⚡ Générer</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="categorie">Catégorie</label>
+            <input type="text" name="categorie" id="categorie" placeholder="ex: Travail, Personnel, Réseaux Sociaux" value="général">
+        </div>
+        <div class="form-group">
+            <label for="note">Note ou commentaire (optionnel)</label>
+            <textarea name="note" id="note" rows="3" placeholder="Informations complémentaires..."></textarea>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Enregistrer</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Annuler</a>
+        </div>
+    </form>
+</div>
+
+<script>
+async function generatePwd() {
+    const res = await fetch('/generate');
+    const data = await res.json();
+    document.getElementById('password').value = data.password;
+}
+</script>
+{% endblock %}

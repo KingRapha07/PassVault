@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}— Configuration{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 4rem auto;">
+    <h2 style="margin-bottom: 0.5rem;">Créer ton coffre-fort</h2>
+    <p style="color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem;">
+        Choisis un mot de passe maître robuste. **Ne le perds pas**, il est impossible de le récupérer et toutes tes données y seront liées.
+    </p>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="master_password">Mot de passe maître (minimum 8 caractères)</label>
+            <input type="password" name="master_password" id="master_password" required minlength="8">
+        </div>
+        <div class="form-group">
+            <label for="confirm">Confirmer le mot de passe maître</label>
+            <input type="password" name="confirm" id="confirm" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Initialiser PassVault</button>
+    </form>
+</div>
+{% endblock %}
