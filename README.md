@@ -1,19 +1,19 @@
-# 🔐 PassVault — Gestionnaire de mots de passe web
+#  PassVault — Gestionnaire de mots de passe web
 
 Application web sécurisée pour stocker et gérer ses mots de passe, avec chiffrement AES-256.
 
-## 🚀 Fonctionnalités
+##  Fonctionnalités
 
-- 🔒 **Chiffrement AES-256** (Fernet) — chaque mot de passe est chiffré avant d'être stocké
-- 🔑 **Mot de passe maître** — dérivé via PBKDF2-SHA256 (480 000 itérations)
-- 👁 **Révélation à la demande** — les mots de passe restent masqués par défaut
-- 📋 **Copie en un clic** — copier un mot de passe sans l'afficher
-- 🎲 **Générateur** — génère des mots de passe forts aléatoires
-- 🗂 **Catégories** — organiser par type (travail, réseaux sociaux, banque...)
-- 🔍 **Recherche** — filtrer par site, identifiant ou catégorie
-- 💾 **SQLite** — base de données locale, aucune donnée envoyée sur internet
+-  **Chiffrement AES-256** (Fernet) — chaque mot de passe est chiffré avant d'être stocké
+-  **Mot de passe maître** — dérivé via PBKDF2-SHA256 (480 000 itérations)
+-  **Révélation à la demande** — les mots de passe restent masqués par défaut
+-  **Copie en un clic** — copier un mot de passe sans l'afficher
+-  **Générateur** — génère des mots de passe forts aléatoires
+-  **Catégories** — organiser par type (travail, réseaux sociaux, banque...)
+-  **Recherche** — filtrer par site, identifiant ou catégorie
+-  **SQLite** — base de données locale, aucune donnée envoyée sur internet
 
-## 📦 Installation
+##  Installation
 
 ```bash
 git clone https://github.com/<pseudo>/passvault.git
@@ -35,7 +35,7 @@ Ouvre ton navigateur sur : **http://127.0.0.1:5000**
 | PBKDF2-SHA256 | Dérivation du mot de passe maître |
 | HTML/CSS + JS | Interface utilisateur |
 
-## 🔐 Sécurité
+##  Sécurité
 
 - Les mots de passe ne sont **jamais stockés en clair** dans la base de données
 - Le mot de passe maître n'est **jamais stocké** — seulement son hash PBKDF2
