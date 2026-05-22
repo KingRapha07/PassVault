@@ -24,7 +24,7 @@ python app.py
 
 Ouvre ton navigateur sur : **http://127.0.0.1:5000**
 
-## 🛠 Technologies
+## Technologies
 
 | Outil | Rôle |
 |-------|------|
@@ -42,6 +42,3 @@ Ouvre ton navigateur sur : **http://127.0.0.1:5000**
 - La clé de chiffrement est **dérivée à la volée** depuis le mot de passe maître
 - Le sel cryptographique est unique et généré aléatoirement à la création
 
-## 📄 Licence
-
-MIT
